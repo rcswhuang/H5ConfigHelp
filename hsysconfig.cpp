@@ -1,16 +1,16 @@
-#include "hsysconfigapi.h"
+#include "hsysconfig.h"
 
 
-HSysconfigapi::HSysconfigapi()
+HSysconfig::HSysconfig()
 {
 }
 
-HSysconfigapi::~HSysconfigapi()
+HSysconfig::~HSysconfig()
 {
 
 }
 
-void HSysconfigapi::initSysSet()
+void HSysconfig::initSysSet(const char* file)
 {
     pSettingList = new HSettingList;
 
@@ -56,45 +56,45 @@ void HSysconfigapi::initSysSet()
     otherSetting->pSysSetList = pOtherSysSetList;
     pSettingList->append(otherSetting);
 
-    pXml = new HXML();
+    pXml = new HXML(file);
     pXml->parseXML();
 }
 
-HSysSetList* HSysconfigapi::getSysSetById(ushort wSettingID)
+HSysSetList* HSysconfig::getSysSetById(int nSettingID)
 {
     if(pSettingList == NULL)
         return NULL;
-    if(wSettingID == SYS_SET_NET)
+    if(nSettingID == SYS_SET_NET)
     {
        if(pNetSysSetList)
            return pNetSysSetList;
     }
-    else if(wSettingID == SYS_SET_NORMAL)
+    else if(nSettingID == SYS_SET_NORMAL)
     {
         if(pNormalSysSetList)
             return pNormalSysSetList;
     }
-    else if(wSettingID ==SYS_SET_FUN )
+    else if(nSettingID ==SYS_SET_FUN )
     {
         if(pFunSysSetList)
             return pFunSysSetList;
     }
-    else if(wSettingID ==SYS_SET_PATH )
+    else if(nSettingID ==SYS_SET_PATH )
     {
         if(pPathSysSetList)
             return pPathSysSetList;
     }
-    else if(wSettingID ==SYS_SET_TICKET)
+    else if(nSettingID ==SYS_SET_TICKET)
     {
         if(pTicketSysSetList)
             return pTicketSysSetList;
     }
-    else if(wSettingID ==SYS_SET_FORMAT )
+    else if(nSettingID ==SYS_SET_FORMAT )
     {
         if(pFormatSysSetList)
             return pFormatSysSetList;
     }
-    else if(wSettingID ==SYS_SET_OTHER )
+    else if(nSettingID ==SYS_SET_OTHER )
     {
         if(pOtherSysSetList)
             return pOtherSysSetList;
@@ -102,16 +102,16 @@ HSysSetList* HSysconfigapi::getSysSetById(ushort wSettingID)
     return NULL;
 }
 
-void HSysconfigapi::getSettingValue(ushort wSettingID, ushort wSysSetID, QVariant *&value)
+void HSysconfig::getSettingValue(int nSettingID, int nSysSetID, QVariant *&value)
 {
-    HSysSetList* pSysSetList = (HSysSetList*)getSysSetById(wSettingID);
+    HSysSetList* pSysSetList = (HSysSetList*)getSysSetById(nSettingID);
     if(pSysSetList)
     {
         QList<SYSSET*>::iterator it;
         for(it = pSysSetList->begin();it != pSysSetList->end();++it)
         {
             SYSSET* sysSet = *it;
-            if(sysSet && sysSet->id == wSysSetID)
+            if(sysSet && sysSet->id == nSysSetID)
             {
                 value = &(sysSet->var);
             }

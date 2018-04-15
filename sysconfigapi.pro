@@ -4,26 +4,30 @@
 #
 #-------------------------------------------------
 
-QT       += xml
-
+QT  += xml
 QT       -= gui
 
 TARGET = sysconfigapi
 TEMPLATE = lib
+DESTDIR = ../lib
 
-DEFINES += SYSCONFIGAPI_LIBRARY
+INCLUDEPATH += \
+            ../include
+
+DEFINES += SYSCONFIG_EXPORT
 
 SOURCES += hxml.cpp \
-    hsysconfigapi.cpp \
-    hsysconfighandle.cpp
+    hsysconfighandle.cpp \
+    hsysconfig.cpp
 
 HEADERS += hxml.h \
-        hsysconfigapi.h\
-        sysconfigapi_global.h \
-    sysconfigapi.h \
-    hsysconfighandle.h
+    hsysconfighandle.h \
+    hsysconfig.h
+
+LIBS += -L../lib/lib64_linux_xerces
 
 unix {
+    LIBS += -lxerces-c
     target.path = /usr/lib
     INSTALLS += target
 }

@@ -1,21 +1,19 @@
 #ifndef HSYSCONFIGAPI_H
 #define HSYSCONFIGAPI_H
-
-#include "sysconfigapi_global.h"
+#include "hconfigapi.h"
 #include "hxml.h"
-#include <QList>
-class HSysconfigapi
+class HSysconfig
 {
 
 public:
-    HSysconfigapi();
-    ~HSysconfigapi();
+    HSysconfig();
+    ~HSysconfig();
 public:
-    void initSysSet();
+    void initSysSet(const char* file);
     //void loadSysSet(HSysSetList* &pSysSetList,ushort wSettingId);
     //void saveSysSet(HSysSetList* &pSysSetList,ushort wSettingId);
-    HSysSetList* getSysSetById(ushort wSettingID);
-    void getSettingValue(ushort wSettingID,ushort wSysSetID,QVariant* &value);
+    HSysSetList* getSysSetById(int nSettingID);
+    void getSettingValue(int nSettingID,int nSysSetID,QVariant* &value);
 
 private:
     HXML *pXml;

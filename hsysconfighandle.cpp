@@ -1,10 +1,11 @@
 #include "hsysconfighandle.h"
-#include "hsysconfigapi.h"
+#include "hconfigapi.h"
+#include "hsysconfig.h"
 HSysConfigHandle* HSysConfigHandle::pInstance = NULL;
 
 HSysConfigHandle* HSysConfigHandle::instance()
 {
-    if(pInstance)
+    if(!pInstance)
     {
         pInstance = new HSysConfigHandle;
     }
@@ -16,21 +17,26 @@ HSysConfigHandle::HSysConfigHandle()
 {
 }
 
-void HSysConfigHandle::initSysConfig()
+void HSysConfigHandle::initSysConfig(const char *file)
 {
     if(pInstance)
     {
-        pSysConfApi = new HSysconfigapi;
-        pSysConfApi->initSysSet();
+        pSysConfApi = new HSysconfig;
+        pSysConfApi->initSysSet(file);
     }
 }
 
 /////////////////////////////////////////////////////////////
-void SYSCONFIGAPISHARED_EXPORT getSettingValue(ushort uSettingID,ushort syssetid,QVariant* &value)
+void SYSCONFIG_EXPORT initSysConfig(const char* file)
 {
-    HSysConfigHandle* pInstance = HSysConfigHandle::instance();
-    if(pInstance)
-    {
-        ((HSysconfigapi*)pInstance->getSysConfApi())->getSettingValue(uSettingID,syssetid,value);
-    }
+    HSysConfigHandle::instance()->initSysConfig(file);
+}
+void SYSCONFIG_EXPORT exitSysConfig()
+{
+
+}
+
+void SYSCONFIG_EXPORT getSettingValue(int nSettingID,int nSysSetID,QVariant* &value)
+{
+
 }

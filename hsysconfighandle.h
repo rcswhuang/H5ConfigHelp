@@ -1,6 +1,7 @@
 #ifndef HSYSCONFIGHANDLE_H
 #define HSYSCONFIGHANDLE_H
-class HSysconfigapi;
+#include <iostream>
+class HSysconfig;
 class HSysConfigHandle
 {
 public:
@@ -8,10 +9,10 @@ public:
     static HSysConfigHandle* pInstance;
     HSysConfigHandle();
 public:
-    void initSysConfig();
-    HSysconfigapi* getSysConfApi(){return pSysConfApi;}
+    void initSysConfig(const char* file);
+    HSysconfig* getSysConfApi(){return pSysConfApi;}
 private:
-    HSysconfigapi* pSysConfApi;
+    HSysconfig* pSysConfApi;
 };
 
 #endif // HSYSCONFIGHANDLE_H
