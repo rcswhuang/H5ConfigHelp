@@ -1,6 +1,5 @@
-#include "hxml.h"
-#include <QFile>
-
+#include "hxercesxml.h"
+#include "hsysconfig.h"
 #if defined(XERCES_NEW_IOSTREAMS)
 #include <iostream>
 #else
@@ -47,16 +46,6 @@ void HXML::setSysconfig(HSysconfig *sysconfig)
 }
 void HXML::parseXML()
 {
-    /*QDomDocument doc;
-    QFile file(strConfigFile);
-    if (!file.open(QIODevice::ReadOnly))
-        return;
-    if (!doc.setContent(&file)) {
-        file.close();
-        return;
-    }
-    file.close();*/
-
     // print out the element names of all elements that are direct children
     // of the outermost element.
     XercesDOMParser *domParser = new XercesDOMParser();
@@ -101,7 +90,7 @@ void HXML::parseXML()
      DOMElement *child = root->getFirstElementChild(); //SETTING
      while(child)
      {
-         char *szId = XMLString::transcode(paraElement->getAttribute(XMLString::transcode("id")));
+         char *szId = XMLString::transcode(child->getAttribute(XMLString::transcode("id")));
          int id = atoi(szId);
          HSysSetList* pSysSetList = m_pSysConfig->getSysSetById(id);
          if(!pSysSetList) continue;
@@ -128,30 +117,74 @@ void HXML::parseDOMElement(DOMElement *&element,HSysSetList* pSysSetList)
     }
 }
 
-
-
-void HXML::parseDomNode(const QDomNode& dom,ushort id)
+void HXML::writeXML()
 {
-    SETTING* setting;// = findSettingById(id);
-    if(setting == NULL)
-        return;
-    QDomNode n = dom.firstChild();//PARAM
-    while(!n.isNull())
-    {
-        QDomElement e = n.toElement(); // try to convert the node to an element.
-        if(!e.isNull())
-        {
-            if(e.tagName() == "PARAMETER")
-            {
-                //objName,id,value
-                SYSSET* sysSet = new SYSSET;
-                e.attribute("OBJNAME",sysSet->strObjName);
-                QString strValue;
-                e.attribute("VALUE",strValue);
-                sysSet->var = QVariant(strValue);
-                setting->pSysSetList->append(sysSet);
+  /*
+   * <?xml version="1.0" encoding="utf-8"?>
+    <SYSCONFIG  name="sysconfig">
+        <SETTING id="SYS_SET_NET">
+            <parameter id="com select" value="com1" />
+            <parameter id="com set" value="9600,n,8,1" />
+       </SETTING>
+    </SYSCONFIG>
+    */
+
+   DOMImplementation* impl =  DOMImplementationRegistry::getDOMImplementation(X("Core"));
+
+   if (impl != NULL)
+   {
+       try
+       {
+           DOMDocument* doc = impl->createDocument(
+                       0,                    // root element namespace URI.
+                       X("Sysconfig"),         // root element name
+                       0);                   // document type object (DTD).
+
+           DOMElement* rootElem = doc->getDocumentElement();
+           rootElem->setAttribute(X("name"),X("sysconfig"));
+           for(int i = SYS_SET_START; i < SYS_SET_MAX;i++)
+           {
+               HSysSetList* pSysSetList = m_pSysConfig->getSysSetById(i);
+               DOMElement*  settingElem = doc->createElement(X("Setting"));
+               settingElem->setAttribute(X("id"),X(std::to_string(i).c_str()));
+               rootElem->appendChild(settingElem);
+               for(int k = 0; k < pSysSetList->count();i++)
+               {
+                   SYSSET* sysset = (SYSSET*)pSysSetList->at(i);
+                   DOMElement*  paraElem = doc->createElement(X("parameter"));
+                   settingElem->appendChild(paraElem);
+                   paraElem->setAttribute(X("id"),X(std::to_string(sysset->id).c_str()));
+                   paraElem->setAttribute(X("value"),X(sysset->var.toString().toStdString().c_str()));
+
+                   const XMLSize_t elementCount = doc->getElementsByTagName(X("*"))->getLength();
+                   XERCES_STD_QUALIFIER cout << "The tree just created contains: " << elementCount
+                        << " elements." << XERCES_STD_QUALIFIER endl;
+
+                   doc->release();
+               }
             }
-        }
-        n = n.nextSibling();
-    }
+       }
+       catch (const OutOfMemoryException&)
+       {
+           XERCES_STD_QUALIFIER cerr << "OutOfMemoryException" << XERCES_STD_QUALIFIER endl;
+           //errorCode = 5;
+       }
+       catch (const DOMException& e)
+       {
+           XERCES_STD_QUALIFIER cerr << "DOMException code is:  " << e.code << XERCES_STD_QUALIFIER endl;
+           //errorCode = 2;
+       }
+       catch (...)
+       {
+           XERCES_STD_QUALIFIER cerr << "An error occurred creating the document" << XERCES_STD_QUALIFIER endl;
+           //errorCode = 3;
+       }
+   }  // (inpl != NULL)
+   else
+   {
+       XERCES_STD_QUALIFIER cerr << "Requested implementation is not supported" << XERCES_STD_QUALIFIER endl;
+       //errorCode = 4;
+   }
 }
+
+

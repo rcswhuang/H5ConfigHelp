@@ -16,13 +16,17 @@ INCLUDEPATH += \
 
 DEFINES += SYSCONFIG_EXPORT
 
-SOURCES += hxml.cpp \
+SOURCES += \
     hsysconfighandle.cpp \
-    hsysconfig.cpp
+    hsysconfig.cpp \
+    hxercesxml.cpp \
+    hqtxml.cpp
 
-HEADERS += hxml.h \
+HEADERS += \
     hsysconfighandle.h \
-    hsysconfig.h
+    hsysconfig.h \
+    hxercesxml.h \
+    hqtxml.h
 
 LIBS += -L../lib/lib64_linux_xerces
 

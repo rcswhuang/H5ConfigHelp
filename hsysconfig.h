@@ -1,7 +1,8 @@
 #ifndef HSYSCONFIGAPI_H
 #define HSYSCONFIGAPI_H
 #include "hconfigapi.h"
-#include "hxml.h"
+#include "hxercesxml.h"
+class HXML;
 class HSysconfig
 {
 
