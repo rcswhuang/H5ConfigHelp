@@ -8,7 +8,7 @@
 
 XERCES_CPP_NAMESPACE_USE
 
-HXML::HXML()
+HXercesXML::HXercesXML()
 {
     try
     {
@@ -21,7 +21,7 @@ HXML::HXML()
     }
 }
 
-HXML::HXML(const char* file)
+HXercesXML::HXercesXML(const char* file)
 {
     try
     {
@@ -35,16 +35,16 @@ HXML::HXML(const char* file)
     m_xmlFile = file;
 }
 
-HXML::~HXML()
+HXercesXML::~HXercesXML()
 {
     XMLPlatformUtils::Terminate();
 }
 
-void HXML::setSysconfig(HSysconfig *sysconfig)
+void HXercesXML::setSysconfig(HSysconfig *sysconfig)
 {
     m_pSysConfig = sysconfig;
 }
-void HXML::parseXML()
+void HXercesXML::parseXML()
 {
     // print out the element names of all elements that are direct children
     // of the outermost element.
@@ -99,7 +99,7 @@ void HXML::parseXML()
      }
 }
 
-void HXML::parseDOMElement(DOMElement *&element,HSysSetList* pSysSetList)
+void HXercesXML::parseDOMElement(DOMElement *&element,HSysSetList* pSysSetList)
 {
     if(!element) return;
     DOMElement* paraElement = element->getFirstElementChild();//PARAMETER
@@ -117,7 +117,7 @@ void HXML::parseDOMElement(DOMElement *&element,HSysSetList* pSysSetList)
     }
 }
 
-void HXML::writeXML()
+void HXercesXML::writeXML()
 {
   /*
    * <?xml version="1.0" encoding="utf-8"?>

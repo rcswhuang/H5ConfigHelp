@@ -54,12 +54,12 @@ private :
 
 #define X(str) XStr(str).unicodeForm()
 
-class HXML
+class HXercesXML
 {
 public:
-    HXML();
-    HXML(const char* file);
-    ~HXML();
+    HXercesXML();
+    HXercesXML(const char* file);
+    ~HXercesXML();
 public:
     void setSysconfig(HSysconfig* sysconfig);
     void parseXML();
