@@ -1,9 +1,8 @@
 #include "hsysconfighandle.h"
-#include "hconfigapi.h"
 #include "hsysconfig.h"
 HSysConfigHandle* HSysConfigHandle::pInstance = NULL;
 
-HSysConfigHandle* HSysConfigHandle::instance()
+HSysConfigHandle* HSysConfigHandle::initInstance()
 {
     if(!pInstance)
     {
@@ -12,31 +11,83 @@ HSysConfigHandle* HSysConfigHandle::instance()
     return pInstance;
 }
 
+void HSysConfigHandle::exitInstance()
+{
+    if(pInstance)
+    {
+        delete pInstance;
+        pInstance = NULL;
+    }
+}
 
 HSysConfigHandle::HSysConfigHandle()
 {
+
+}
+
+HSysConfigHandle::~HSysConfigHandle()
+{
+    if(pSysconfig)
+    {
+        delete pSysconfig;
+        pSysconfig = NULL;
+    }
 }
 
 void HSysConfigHandle::initSysConfig(const char *file)
 {
     if(pInstance)
     {
-        pSysConfApi = new HSysconfig;
-        pSysConfApi->initSysSet(file);
+        pSysconfig = new HSysconfig;
+        pSysconfig->initSysSet(file);
     }
 }
 
+
+void HSysConfigHandle::getSettingValue(int nSettingID,int nSysSetID,QVariant* &value)
+{
+    if(pInstance)
+    {
+        pSysconfig->getSettingValue(nSettingID,nSysSetID,value);
+    }
+}
+
+void  HSysConfigHandle::getSysConfigByID(int nSettingID,HSysSetList* &sysSetList)
+{
+    if(pSysconfig)
+        sysSetList = pSysconfig->getSysSetById(nSettingID);
+    else
+        sysSetList = NULL;
+}
+
+bool  HSysConfigHandle::applySysConfig()
+{
+    //保存
+    return false;
+}
+
 /////////////////////////////////////////////////////////////
-void SYSCONFIG_EXPORT initSysConfig(const char* file)
+void initSysConfig(const char* file)
 {
-    HSysConfigHandle::instance()->initSysConfig(file);
-}
-void SYSCONFIG_EXPORT exitSysConfig()
-{
-
+    HSysConfigHandle::initInstance()->initSysConfig(file);
 }
 
-void SYSCONFIG_EXPORT getSettingValue(int nSettingID,int nSysSetID,QVariant* &value)
+void exitSysConfig()
 {
+    HSysConfigHandle::exitInstance();
+}
 
+void getSettingValue(int nSettingID,int nSysSetID,QVariant* &value)
+{
+    HSysConfigHandle::initInstance()->getSettingValue(nSettingID,nSysSetID,value);
+}
+
+void  getSysConfigByID(int nSettingID,HSysSetList* &sysSetList)
+{
+    HSysConfigHandle::initInstance()->getSysConfigByID(nSettingID,sysSetList);
+}
+
+bool  applySysConfig()
+{
+    return  HSysConfigHandle::initInstance()->applySysConfig();
 }

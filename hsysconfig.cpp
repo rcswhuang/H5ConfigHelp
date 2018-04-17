@@ -1,13 +1,30 @@
 #include "hsysconfig.h"
-
-
+#include "hqtxml.h"
 HSysconfig::HSysconfig()
 {
 }
 
 HSysconfig::~HSysconfig()
 {
-
+    while(!pSettingList->isEmpty())
+    {
+        SETTING* setting = pSettingList->takeFirst();
+        if(setting)
+        {
+            while(!setting->pSysSetList->isEmpty())
+            {
+                SYSSET *sysset = setting->pSysSetList->takeFirst();
+                if(sysset)
+                {
+                    delete sysset;
+                    sysset = NULL;
+                }
+            }
+            setting->pSysSetList->clear();
+        }
+        delete setting;
+    }
+    pSettingList->clear();
 }
 
 void HSysconfig::initSysSet(const char* file)
@@ -56,8 +73,8 @@ void HSysconfig::initSysSet(const char* file)
     otherSetting->pSysSetList = pOtherSysSetList;
     pSettingList->append(otherSetting);
 
-    pXml = new HXML(file);
-    pXml->parseXML();
+    pQtXml = new HQtXml(this,file);
+    pQtXml->parseXML();
 }
 
 HSysSetList* HSysconfig::getSysSetById(int nSettingID)
@@ -119,3 +136,9 @@ void HSysconfig::getSettingValue(int nSettingID, int nSysSetID, QVariant *&value
     }
 }
 
+bool HSysconfig::apply()
+{
+    if(!pQtXml) return false;
+    pQtXml->writeXML();
+    return true;
+}

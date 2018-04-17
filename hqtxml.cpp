@@ -1,13 +1,13 @@
 #include "hqtxml.h"
 #include <QFile>
 #include "hsysconfig.h"
-HQtXML::HQtXML(HSysconfig* sysconfig)
-    :pSysConfig(sysconfig)
+HQtXml::HQtXml(HSysconfig* sysconfig,const char* file)
+    :pSysConfig(sysconfig),strConfigFile(file)
 {
 
 }
 
-HQtXML::~HQtXML()
+HQtXml::~HQtXml()
 {
 
 }
@@ -27,7 +27,7 @@ HQtXML::~HQtXML()
    ...
 </SYSCONFIG>
 */
-void HQtXML::parseXML()
+void HQtXml::parseXML()
 {
     QDomDocument doc;
     QFile file(strConfigFile);
@@ -63,7 +63,7 @@ void HQtXML::parseXML()
 
 }
 
-void HQtXML::parseDomNode(const QDomNode& dom,HSysSetList* pList)
+void HQtXml::parseDomNode(const QDomNode& dom,HSysSetList* pList)
 {
     //SETTING* setting;// = findSettingById(id);
     if(pList == NULL)
@@ -93,10 +93,7 @@ void HQtXML::parseDomNode(const QDomNode& dom,HSysSetList* pList)
     }
 }
 
-
-
-
-void HQtXML::writeXML()
+void HQtXml::writeXML()
 {
     QDomDocument doc("MyML");
     QDomProcessingInstruction instruction;
@@ -117,7 +114,7 @@ void HQtXML::writeXML()
     }
 }
 
-void HQtXML::writeDomNode(QDomDocument &doc,QDomElement& root, HSysSetList* &pSysSetList)
+void HQtXml::writeDomNode(QDomDocument &doc,QDomElement& root, HSysSetList* &pSysSetList)
 {
     if(pSysSetList == NULL)
         return;
@@ -135,13 +132,13 @@ void HQtXML::writeDomNode(QDomDocument &doc,QDomElement& root, HSysSetList* &pSy
 }
 
 
-void HQtXML::loadSysSet(HSettingList* &sysSetList)
+void HQtXml::loadSysSet(HSettingList* &sysSetList)
 {
     //pSysSetList = sysSetList;
     //parseXML();
 }
 
-void HQtXML::saveSysSet(HSettingList* &sysSetList)
+void HQtXml::saveSysSet(HSettingList* &sysSetList)
 {
     //pSysSetList = sysSetList;
     //writeXML();

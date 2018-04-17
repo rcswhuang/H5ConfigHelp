@@ -1,5 +1,5 @@
-﻿#ifndef HXML_H
-#define HXML_H
+﻿#ifndef HXERCESXML_H
+#define HXERCESXML_H
 #include "hconfigapi.h"
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
@@ -11,6 +11,8 @@
 #include <xercesc/util/OutOfMemoryException.hpp>
 XERCES_CPP_NAMESPACE_USE
 class HSysconfig;
+
+
 /*
  * 注释:xerces易用性太差，远不如Qt。此处备份留作参考。实际分析采用qt类
 */

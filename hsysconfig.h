@@ -1,8 +1,7 @@
-#ifndef HSYSCONFIGAPI_H
-#define HSYSCONFIGAPI_H
+#ifndef HSYSCONFIG_H
+#define HSYSCONFIG_H
 #include "hconfigapi.h"
-#include "hxercesxml.h"
-class HXML;
+class HQtXml;
 class HSysconfig
 {
 
@@ -11,13 +10,11 @@ public:
     ~HSysconfig();
 public:
     void initSysSet(const char* file);
-    //void loadSysSet(HSysSetList* &pSysSetList,ushort wSettingId);
-    //void saveSysSet(HSysSetList* &pSysSetList,ushort wSettingId);
     HSysSetList* getSysSetById(int nSettingID);
     void getSettingValue(int nSettingID,int nSysSetID,QVariant* &value);
-
+    bool apply();
 private:
-    HXML *pXml;
+    HQtXml *pQtXml;
     HSettingList* pSettingList;
     HSysSetList* pNormalSysSetList;//一般设置
     HSysSetList* pNetSysSetList;//网络设置
