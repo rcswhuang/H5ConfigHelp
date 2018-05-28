@@ -2,6 +2,7 @@
 #define HXERCESXML_H
 #include "hconfigapi.h"
 #include <xercesc/util/PlatformUtils.hpp>
+#include <xercesc/util/XercesDefs.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc/sax/HandlerBase.hpp>
 #include <xercesc/dom/DOMDocument.hpp>
@@ -9,7 +10,9 @@
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/OutOfMemoryException.hpp>
+
 XERCES_CPP_NAMESPACE_USE
+
 class HSysconfig;
 
 

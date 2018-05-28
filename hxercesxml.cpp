@@ -1,11 +1,6 @@
 #include "hxercesxml.h"
 #include "hsysconfig.h"
-#if defined(XERCES_NEW_IOSTREAMS)
 #include <iostream>
-#else
-#include <iostream.h>
-#endif
-
 XERCES_CPP_NAMESPACE_USE
 
 HXercesXML::HXercesXML()
