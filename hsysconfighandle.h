@@ -14,7 +14,7 @@ public:
     ~HSysConfigHandle();
 public:
     void initSysConfig(const char* file);
-    void getSettingValue(int nSettingID,int nSysSetID,QVariant* &value);
+    void getSettingValue(int nSettingID,int nSysSetID,QVariant &value);
     //HSysconfig* getSysConfig(){return pSysconfig;}
     void   getSysConfigByID(int nSysSetID,HSysSetList* &sysSetList);
     bool   applySysConfig();

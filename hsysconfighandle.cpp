@@ -1,5 +1,9 @@
 #include "hsysconfighandle.h"
 #include "hsysconfig.h"
+
+/*
+ * 注意：系统配置文件必须存放在对应bin目录下面
+*/
 HSysConfigHandle* HSysConfigHandle::pInstance = NULL;
 
 HSysConfigHandle* HSysConfigHandle::initInstance()
@@ -44,7 +48,7 @@ void HSysConfigHandle::initSysConfig(const char *file)
 }
 
 
-void HSysConfigHandle::getSettingValue(int nSettingID,int nSysSetID,QVariant* &value)
+void HSysConfigHandle::getSettingValue(int nSettingID,int nSysSetID,QVariant &value)
 {
     if(pInstance)
     {
@@ -77,7 +81,7 @@ void exitSysConfig()
     HSysConfigHandle::exitInstance();
 }
 
-void getSettingValue(int nSettingID,int nSysSetID,QVariant* &value)
+void getSettingValue(int nSettingID,int nSysSetID,QVariant &value)
 {
     HSysConfigHandle::initInstance()->getSettingValue(nSettingID,nSysSetID,value);
 }

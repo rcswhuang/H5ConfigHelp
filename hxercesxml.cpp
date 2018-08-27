@@ -39,6 +39,7 @@ void HXercesXML::setSysconfig(HSysconfig *sysconfig)
 {
     m_pSysConfig = sysconfig;
 }
+
 void HXercesXML::parseXML()
 {
     // print out the element names of all elements that are direct children

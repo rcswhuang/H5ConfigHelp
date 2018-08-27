@@ -11,7 +11,7 @@ public:
 public:
     void initSysSet(const char* file);
     HSysSetList* getSysSetById(int nSettingID);
-    void getSettingValue(int nSettingID,int nSysSetID,QVariant* &value);
+    void getSettingValue(int nSettingID,int nSysSetID,QVariant &value);
     bool apply();
 private:
     HQtXml *pQtXml;
