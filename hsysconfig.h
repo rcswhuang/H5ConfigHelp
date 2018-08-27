@@ -9,10 +9,11 @@ public:
     HSysconfig();
     ~HSysconfig();
 public:
-    void initSysSet(const char* file);
+    void initSysSet();
     HSysSetList* getSysSetById(int nSettingID);
-    void getSettingValue(int nSettingID,int nSysSetID,QVariant &value);
+    void getSettingValue(int nSettingID,int nSysSetID,QVariant* &value);
     bool apply();
+    QString getConfigXmlFile();
 private:
     HQtXml *pQtXml;
     HSettingList* pSettingList;

@@ -9,7 +9,7 @@ class HSysconfig;
 class HQtXml
 {
 public:
-    HQtXml(HSysconfig* sysconfig,const char* file);
+    HQtXml(HSysconfig* sysconfig,QString strConfigXmlFile);
     ~HQtXml();
 public:
     void parseXML();

@@ -1,9 +1,5 @@
 #include "hsysconfighandle.h"
 #include "hsysconfig.h"
-
-/*
- * 注意：系统配置文件必须存放在对应bin目录下面
-*/
 HSysConfigHandle* HSysConfigHandle::pInstance = NULL;
 
 HSysConfigHandle* HSysConfigHandle::initInstance()
@@ -38,17 +34,17 @@ HSysConfigHandle::~HSysConfigHandle()
     }
 }
 
-void HSysConfigHandle::initSysConfig(const char *file)
+void HSysConfigHandle::initSysConfig()
 {
     if(pInstance)
     {
         pSysconfig = new HSysconfig;
-        pSysconfig->initSysSet(file);
+        pSysconfig->initSysSet();
     }
 }
 
 
-void HSysConfigHandle::getSettingValue(int nSettingID,int nSysSetID,QVariant &value)
+void HSysConfigHandle::getSettingValue(int nSettingID,int nSysSetID,QVariant* &value)
 {
     if(pInstance)
     {
@@ -67,13 +63,13 @@ void  HSysConfigHandle::getSysConfigByID(int nSettingID,HSysSetList* &sysSetList
 bool  HSysConfigHandle::applySysConfig()
 {
     //保存
-    return false;
+    return pSysconfig->apply();
 }
 
 /////////////////////////////////////////////////////////////
-void initSysConfig(const char* file)
+void initSysConfig()
 {
-    HSysConfigHandle::initInstance()->initSysConfig(file);
+    HSysConfigHandle::initInstance()->initSysConfig();
 }
 
 void exitSysConfig()
@@ -81,7 +77,7 @@ void exitSysConfig()
     HSysConfigHandle::exitInstance();
 }
 
-void getSettingValue(int nSettingID,int nSysSetID,QVariant &value)
+void getSettingValue(int nSettingID,int nSysSetID,QVariant* &value)
 {
     HSysConfigHandle::initInstance()->getSettingValue(nSettingID,nSysSetID,value);
 }

@@ -10,9 +10,7 @@
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/OutOfMemoryException.hpp>
-
 XERCES_CPP_NAMESPACE_USE
-
 class HSysconfig;
 
 

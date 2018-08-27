@@ -35,8 +35,8 @@ debug:{LIBS += ../lib/lib64-xerces-vc12/x64debug/xerces-c_3D.lib}
 release:{LIBS += ../lib/lib64-xerces-vc12/x64release/xerces-c_3.lib}
 }
 unix {
-    LIBS += -L../lib/lib64_linux_xerces -lxerces-c
-    UI_DIR=	.ui
-    MOC_DIR= .moc
-    OBJECTS_DIR= .obj
+    LIBS += -L../lib/lib64_linux_xercesc -lxerces-c
+    #UI_DIR=	.ui
+    #MOC_DIR= .moc
+    #OBJECTS_DIR= .obj
 }

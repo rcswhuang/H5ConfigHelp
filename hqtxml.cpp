@@ -1,8 +1,9 @@
 #include "hqtxml.h"
-#include <QFile>
 #include "hsysconfig.h"
-HQtXml::HQtXml(HSysconfig* sysconfig,const char* file)
-    :pSysConfig(sysconfig),strConfigFile(file)
+#include <QFile>
+#include <QTextStream>
+HQtXml::HQtXml(HSysconfig* sysconfig,QString strConfigXmlFile)
+    :pSysConfig(sysconfig),strConfigFile(strConfigXmlFile)
 {
 
 }
@@ -42,7 +43,6 @@ void HQtXml::parseXML()
     // print out the element names of all elements that are direct children
     // of the outermost element.
     QDomElement docElem = doc.documentElement();
-
     QDomNode n = docElem.firstChild();//SETTING
     while(!n.isNull()) {
         if(!n.hasAttributes())
@@ -51,12 +51,14 @@ void HQtXml::parseXML()
         if(!e.isNull())
         {
             QString strId;
-            e.attribute("id",strId);
+            strId = e.attribute("id");
+            if(strId.isEmpty())
+                continue;
             int wSettingID = strId.toUShort();
             HSysSetList* pSysSetList = NULL;
             pSysSetList = pSysConfig->getSysSetById(wSettingID);
-            if(!pSysSetList) continue;
-            parseDomNode(n,pSysSetList);
+            if(pSysSetList)
+                parseDomNode(n,pSysSetList);
         }
         n = n.nextSibling();
     }
@@ -80,10 +82,10 @@ void HQtXml::parseDomNode(const QDomNode& dom,HSysSetList* pList)
                 if(sysSet)
                 {
                     QString strId;
-                    e.attribute("id",strId);
+                    strId = e.attribute("id");
                     sysSet->id = strId.toUShort();
                     QString strValue;
-                    e.attribute("value",strValue);
+                    strValue = e.attribute("value");
                     sysSet->var = QVariant(strValue);
                     pList->append(sysSet);
                 }
@@ -95,14 +97,18 @@ void HQtXml::parseDomNode(const QDomNode& dom,HSysSetList* pList)
 
 void HQtXml::writeXML()
 {
-    QDomDocument doc("MyML");
+    QFile file(strConfigFile);
+    if(!file.open(QIODevice::WriteOnly))
+        return;
+    QTextStream dsm(&file);
+    QDomDocument doc;
     QDomProcessingInstruction instruction;
     instruction = doc.createProcessingInstruction("xml" , "version =\"1.0\" encoding=\"UTF-8\"");
     doc.appendChild(instruction);
     QDomElement root = doc.createElement("Sysconfig");
     doc.appendChild(root);
 
-    for(int i = SYS_SET_START; i < SYS_SET_MAX;i++)
+    for(int i = SYS_SET_START+1; i <= SYS_SET_MAX;i++)
     {
         QDomElement setDom = doc.createElement("Setting");
         QDomAttr idAttr = doc.createAttribute("id");
@@ -110,8 +116,12 @@ void HQtXml::writeXML()
         setDom.setAttributeNode(idAttr);
         root.appendChild(setDom);
         HSysSetList* pSysSetList = pSysConfig->getSysSetById(i);
-        writeDomNode(doc,root,pSysSetList);
+        writeDomNode(doc,setDom,pSysSetList);
     }
+
+    dsm.setCodec("UTF-8");
+    doc.save(dsm,4);
+    file.close();
 }
 
 void HQtXml::writeDomNode(QDomDocument &doc,QDomElement& root, HSysSetList* &pSysSetList)
@@ -125,6 +135,7 @@ void HQtXml::writeDomNode(QDomDocument &doc,QDomElement& root, HSysSetList* &pSy
         {
             QDomElement dom = doc.createElement("Parameter");
             dom.setAttribute("id",sysSet->id);
+            dom.setAttribute("name",sysSet->strObjName);
             dom.setAttribute("value",sysSet->var.toString());
             root.appendChild(dom);
         }

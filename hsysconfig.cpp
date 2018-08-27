@@ -1,5 +1,7 @@
 #include "hsysconfig.h"
 #include "hqtxml.h"
+#include <QProcessEnvironment>
+#include <QCoreApplication>
 HSysconfig::HSysconfig()
 {
 }
@@ -27,7 +29,19 @@ HSysconfig::~HSysconfig()
     pSettingList->clear();
 }
 
-void HSysconfig::initSysSet(const char* file)
+QString HSysconfig::getConfigXmlFile()
+{
+    QString strConfigFilePath = QProcessEnvironment::systemEnvironment().value("wfsystem_dir");
+    if(strConfigFilePath.isEmpty())
+    {
+        strConfigFilePath = QCoreApplication::applicationDirPath();
+        strConfigFilePath = strConfigFilePath.left(strConfigFilePath.lastIndexOf("/"));
+    }
+    QString strConfigFile = strConfigFilePath + "/wfconfig.xml";
+    return strConfigFile;
+}
+
+void HSysconfig::initSysSet()
 {
     pSettingList = new HSettingList;
 
@@ -73,7 +87,7 @@ void HSysconfig::initSysSet(const char* file)
     otherSetting->pSysSetList = pOtherSysSetList;
     pSettingList->append(otherSetting);
 
-    pQtXml = new HQtXml(this,file);
+    pQtXml = new HQtXml(this,getConfigXmlFile());
     pQtXml->parseXML();
 }
 
@@ -119,7 +133,7 @@ HSysSetList* HSysconfig::getSysSetById(int nSettingID)
     return NULL;
 }
 
-void HSysconfig::getSettingValue(int nSettingID, int nSysSetID, QVariant &value)
+void HSysconfig::getSettingValue(int nSettingID, int nSysSetID, QVariant *&value)
 {
     HSysSetList* pSysSetList = (HSysSetList*)getSysSetById(nSettingID);
     if(pSysSetList)
@@ -130,7 +144,7 @@ void HSysconfig::getSettingValue(int nSettingID, int nSysSetID, QVariant &value)
             SYSSET* sysSet = *it;
             if(sysSet && sysSet->id == nSysSetID)
             {
-                value = sysSet->var;
+                value = &(sysSet->var);
             }
         }
     }
