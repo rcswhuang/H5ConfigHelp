@@ -2,6 +2,7 @@
 #include "hqtxml.h"
 #include <QProcessEnvironment>
 #include <QCoreApplication>
+#include <QFile>
 HSysconfig::HSysconfig()
 {
 }
@@ -31,14 +32,24 @@ HSysconfig::~HSysconfig()
 
 QString HSysconfig::getConfigXmlFile()
 {
-    QString strConfigFilePath = QProcessEnvironment::systemEnvironment().value("wfsystem_dir");
-    if(strConfigFilePath.isEmpty())
+    //1.在系统目录下面寻找，如果找不到
+    QString strConfigXml = "";
+    //char szConfigXml[256];
+#ifdef WIN32
+    strConfigXml = "c:/windows/system32/wfconfig.xml";
+    //qstrcpy(szConfigXml,"c:/windows/system32/wfconfig.xml");
+#else
+    strConfigXml = "/usr/etc/wfconfig.xml";
+    //qstrcpy(szConfigXml,"/usr/etc/wfconfig.xml");
+#endif
+    if(!QFile::exists(strConfigXml))
     {
-        strConfigFilePath = QCoreApplication::applicationDirPath();
-        strConfigFilePath = strConfigFilePath.left(strConfigFilePath.lastIndexOf("/"));
+        QString strPath = QCoreApplication::applicationDirPath();
+        strPath = strPath.left(strPath.lastIndexOf("/"));
+        strConfigXml = strPath + "/" + "wfconfig.xml";
+        //qstrcpy(szConfigXml,strConfigXml.toLocal8Bit().data());
     }
-    QString strConfigFile = strConfigFilePath + "/wfconfig.xml";
-    return strConfigFile;
+    return strConfigXml;
 }
 
 void HSysconfig::initSysSet()
