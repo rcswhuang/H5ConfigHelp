@@ -25,5 +25,5 @@ private:
     HSysSetList* pTicketSysSetList;//操作票设置
     HSysSetList* pOtherSysSetList;//其他设置
 };
-
+//
 #endif // HSYSCONFIGAPI_H

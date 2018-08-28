@@ -142,15 +142,3 @@ void HQtXml::writeDomNode(QDomDocument &doc,QDomElement& root, HSysSetList* &pSy
     }
 }
 
-
-void HQtXml::loadSysSet(HSettingList* &sysSetList)
-{
-    //pSysSetList = sysSetList;
-    //parseXML();
-}
-
-void HQtXml::saveSysSet(HSettingList* &sysSetList)
-{
-    //pSysSetList = sysSetList;
-    //writeXML();
-}

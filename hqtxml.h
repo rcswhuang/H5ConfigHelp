@@ -16,8 +16,6 @@ public:
     void parseDomNode(const QDomNode& dom,HSysSetList* pList);
     void writeXML();
     void writeDomNode(QDomDocument& doc,QDomElement& root,HSysSetList* &pSysSetList);
-    void loadSysSet(HSettingList* &sysSetList);
-    void saveSysSet(HSettingList* &sysSetList);
 
 public:
     HSysconfig* pSysConfig;

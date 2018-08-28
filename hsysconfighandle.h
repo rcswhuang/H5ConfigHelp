@@ -7,9 +7,6 @@ class HSysconfig;
 class HSysConfigHandle
 {
 public:
-    static HSysConfigHandle* initInstance();
-    static HSysConfigHandle* pInstance;
-    static void exitInstance();
     HSysConfigHandle();
     ~HSysConfigHandle();
 public:

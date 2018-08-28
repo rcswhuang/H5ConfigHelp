@@ -1,25 +1,5 @@
 #include "hsysconfighandle.h"
 #include "hsysconfig.h"
-HSysConfigHandle* HSysConfigHandle::pInstance = NULL;
-
-HSysConfigHandle* HSysConfigHandle::initInstance()
-{
-    if(!pInstance)
-    {
-        pInstance = new HSysConfigHandle;
-    }
-    return pInstance;
-}
-
-void HSysConfigHandle::exitInstance()
-{
-    if(pInstance)
-    {
-        delete pInstance;
-        pInstance = NULL;
-    }
-}
-
 HSysConfigHandle::HSysConfigHandle()
 {
 
@@ -36,20 +16,14 @@ HSysConfigHandle::~HSysConfigHandle()
 
 void HSysConfigHandle::initSysConfig()
 {
-    if(pInstance)
-    {
-        pSysconfig = new HSysconfig;
-        pSysconfig->initSysSet();
-    }
+    pSysconfig = new HSysconfig;
+    pSysconfig->initSysSet();
 }
 
 
 void HSysConfigHandle::getSettingValue(int nSettingID,int nSysSetID,QVariant* &value)
 {
-    if(pInstance)
-    {
-        pSysconfig->getSettingValue(nSettingID,nSysSetID,value);
-    }
+    pSysconfig->getSettingValue(nSettingID,nSysSetID,value);
 }
 
 void  HSysConfigHandle::getSysConfigByID(int nSettingID,HSysSetList* &sysSetList)
@@ -66,28 +40,25 @@ bool  HSysConfigHandle::applySysConfig()
     return pSysconfig->apply();
 }
 
+////////////////////////////////////////////////////////////
+HSysConfigHandle sysConfigHandle;
 /////////////////////////////////////////////////////////////
 void initSysConfig()
 {
-    HSysConfigHandle::initInstance()->initSysConfig();
-}
-
-void exitSysConfig()
-{
-    HSysConfigHandle::exitInstance();
+    sysConfigHandle.initSysConfig();
 }
 
 void getSettingValue(int nSettingID,int nSysSetID,QVariant* &value)
 {
-    HSysConfigHandle::initInstance()->getSettingValue(nSettingID,nSysSetID,value);
+    sysConfigHandle.getSettingValue(nSettingID,nSysSetID,value);
 }
 
 void  getSysConfigByID(int nSettingID,HSysSetList* &sysSetList)
 {
-    HSysConfigHandle::initInstance()->getSysConfigByID(nSettingID,sysSetList);
+    sysConfigHandle.getSysConfigByID(nSettingID,sysSetList);
 }
 
 bool  applySysConfig()
 {
-    return  HSysConfigHandle::initInstance()->applySysConfig();
+    return  sysConfigHandle.applySysConfig();
 }
