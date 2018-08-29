@@ -21,7 +21,7 @@ void HSysConfigHandle::initSysConfig()
 }
 
 
-void HSysConfigHandle::getSettingValue(int nSettingID,int nSysSetID,QVariant* &value)
+void HSysConfigHandle::getSettingValue(int nSettingID,int nSysSetID,QVariant &value)
 {
     pSysconfig->getSettingValue(nSettingID,nSysSetID,value);
 }
@@ -48,7 +48,8 @@ void initSysConfig()
     sysConfigHandle.initSysConfig();
 }
 
-void getSettingValue(int nSettingID,int nSysSetID,QVariant* &value)
+
+void getSettingValue(int nSettingID,int nSysSetID,QVariant &value)
 {
     sysConfigHandle.getSettingValue(nSettingID,nSysSetID,value);
 }

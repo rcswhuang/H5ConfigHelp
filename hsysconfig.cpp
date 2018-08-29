@@ -136,7 +136,7 @@ HSysSetList* HSysconfig::getSysSetById(int nSettingID)
     return NULL;
 }
 
-void HSysconfig::getSettingValue(int nSettingID, int nSysSetID, QVariant *&value)
+void HSysconfig::getSettingValue(int nSettingID, int nSysSetID, QVariant &value)
 {
     HSysSetList* pSysSetList = (HSysSetList*)getSysSetById(nSettingID);
     if(pSysSetList)
@@ -147,7 +147,7 @@ void HSysconfig::getSettingValue(int nSettingID, int nSysSetID, QVariant *&value
             SYSSET* sysSet = *it;
             if(sysSet && sysSet->id == nSysSetID)
             {
-                value = &(sysSet->var);
+                value = (sysSet->var);
             }
         }
     }
