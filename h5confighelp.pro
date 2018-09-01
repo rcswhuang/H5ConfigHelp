@@ -36,7 +36,7 @@ win32{
 }
 unix {
     #LIBS += -L../lib/lib64_linux_xercesc -lxerces-c
-    #UI_DIR=	.ui
-    #MOC_DIR= .moc
-    #OBJECTS_DIR= .obj
+    UI_DIR = temp/ui
+    MOC_DIR = temp/moc
+    OBJECTS_DIR	= temp/obj
 }
